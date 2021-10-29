@@ -1,7 +1,7 @@
 # erchive/zep
 
 erchive is a go program that compresses and encrypts files and entire directories into .zep files (encrypted zip files).
-it compresses using go's built in zip compression and it encrypts using go's built in advanced encryption standard algorithm.
+it compresses using go's built-in zip compression and it encrypts using go's built-in advanced encryption standard algorithm.
 it was built to be able to encrypt entire directories using only a single password; the compress is just a bonus.
 
 ## erchive
@@ -48,14 +48,14 @@ this application only needs to access the file system to read and write the file
 ### service
 
 the service layer of the application.
-a encrypter service is used to handle encryption and decryption of byte data.
+an encrypter service is used to handle encryption and decryption of byte data.
 a hasher service is used to generate hashed bytes from byte data
 
 ## files
 
 ### .zip
 
-represents a file format that is compressed using a number of algorithms. deflate is used in this implementation
+represents a file format that is compressed using several algorithms. deflate is used in this implementation
 
 ### .zap
 
