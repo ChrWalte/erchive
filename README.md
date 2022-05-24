@@ -6,6 +6,15 @@ it was built to be able to encrypt entire directories using only a single passwo
 
 ## erchive
 
+### usage
+
+to use erchive one must pass in console arguments for the directory or file to erchive and the password to use during encryption.
+example:
+
+- erchive.exe ./backup backup-password
+- erchive.exe ./secrets secrets-password
+- erchive ./secrets secrets-password
+
 ### download
 
 the only way to download the executable is to download the source code.
@@ -19,37 +28,6 @@ a real download method will be developed and the binaries will be removed.
 
 to compile the source code one must have a go.17+ compiler installed.
 compile like a normal go program.
-
-### usage
-
-to use erchive one must pass in console arguments for the directory or file to erchive and the password to use during encryption.
-example:
-
-- erchive.exe ./backup backup-password
-- erchive.exe ./secrets secrets-password
-- erchive ./secrets secrets-password
-
-## folder structure
-
-the folder and project structure was designed when I was learning many different system design patterns.
-this heavily influenced the decisions I made in this project and I may have been too eager to try some.
-the structure should be rethought and redesigned when a bigger picture can be seen.
-
-### .bin
-
-the temporary location of the compiled binaries.
-each version can be found here alongside a zip version of each.
-
-### data
-
-the data access layer of the application.
-this application only needs to access the file system to read and write the files erchive.
-
-### service
-
-the service layer of the application.
-an encrypter service is used to handle encryption and decryption of byte data.
-a hasher service is used to generate hashed bytes from byte data
 
 ## files
 

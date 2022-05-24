@@ -74,7 +74,7 @@ func WriteFile(pathToFile string, contents []byte) error {
 // pathToFile: path to the file to write.
 // contents: data to write to the file.
 func WriteFileWithString(filePath string, contents string) error {
-	// convet from string to bytes.
+	// convert from string to bytes.
 	contentBytes := []byte(contents)
 
 	// write to file using bytes.

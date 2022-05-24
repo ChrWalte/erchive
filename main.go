@@ -11,24 +11,25 @@ import (
 	"path/filepath"
 	"strconv"
 	"strings"
+	"time"
 )
 
-// compress -> encrypt
-// decrypt -> decompress
+// compression and encryption needs to happen in this order:
+// [ compress ] -> [  encrypt     ]
+// [ decrypt  ] -> [  decompress  ]
 // https://stackoverflow.com/questions/4676095/when-compressing-and-encrypting-should-i-compress-first-or-encrypt-first?noredirect=1&lq=1
 
-// main function of the project
+// the main entry function
 func main() {
 	// handle arguments to obtain the path to the file and the key
 	useDir, key := handleArgs()
 
-	// check if the useDir is empty
-	if useDir == "" {
-		// if it is empty, show error message
+	// if useDir, is Empty_String: panic
+	if useDir == constants.Empty_String {
 		panic(constants.Error_Directory_Not_Provided)
 	}
 
-	// get the current extention for the given dir
+	// get the current extension for the given dir
 	extension := filepath.Ext(useDir)
 
 	// get the hashed version of the password
@@ -36,11 +37,14 @@ func main() {
 
 	// switch on the extension
 	switch extension {
+	case constants.Dot_Zep: // [file.zep]
 
-	// if the extension is .zep
-	case constants.Dot_Zep:
 		// decrypt the file
+		fmt.Println(constants.Decryption_Message)
+		start := time.Now()
 		handleDecryption(useDir, keyBytes)
+		elapsed := time.Since(start)
+		fmt.Println("finished in [", elapsed, "].")
 
 		// drop the .zep extension
 		removedZep := strings.TrimSuffix(useDir, constants.Dot_Zep)
@@ -49,34 +53,54 @@ func main() {
 		zipDir := removedZep + constants.Dot_Zip
 
 		// decompress the file
+		fmt.Println(constants.Decompression_Message)
+		start = time.Now()
 		handleDecompression(zipDir)
+		elapsed = time.Since(start)
+		fmt.Println("finished in [", elapsed, "].")
 
 		// remove the regular zip file
 		fmt.Println(constants.Cleaning_Message)
+		start = time.Now()
 		os.Remove(zipDir)
+		elapsed = time.Since(start)
+		fmt.Println("finished in [", elapsed, "].")
 
-	// if the extension is .zip
-	case constants.Dot_Zip:
+	case constants.Dot_Zip: // [file.zip]
 
 		// compress the file
 		fmt.Println(constants.Only_Decompressing_Message)
+		start := time.Now()
 		handleDecompression(useDir)
+		elapsed := time.Since(start)
+		fmt.Println("finished in [", elapsed, "].")
 
 	// if the extension is not .zep or .zip, then it is a directory
 	default:
 
 		// compress the file
+		fmt.Println(constants.Compression_Message)
+		start := time.Now()
 		handleCompression(useDir)
+		elapsed := time.Since(start)
+		fmt.Println("finished in [", elapsed, "].")
 
 		// add the .zip extension
 		zipDir := useDir + constants.Dot_Zip
 
 		// encrypt the file
+		fmt.Println(constants.Encryption_Message)
+		start = time.Now()
 		handleEncryption(zipDir, keyBytes)
+		elapsed = time.Since(start)
+		fmt.Println("finished in [", elapsed, "].")
 
 		// remove the regular zip file
 		fmt.Println(constants.Cleaning_Message)
+		start = time.Now()
 		os.Remove(zipDir)
+		elapsed = time.Since(start)
+		fmt.Println("finished in [", elapsed, "].")
 	}
 	fmt.Println(constants.Exited_Message)
 }
@@ -180,6 +204,7 @@ func handleDecryption(pathToFile string, key []byte) {
 	}
 }
 
+// TODO: show hash of file, zip, and zep
 func getFileHash(pathToFile string) string {
 	// get the file contents
 	contents, err := fileio.ReadFile(pathToFile)
@@ -196,6 +221,7 @@ func getFileHash(pathToFile string) string {
 	return hex.EncodeToString(hash[:])
 }
 
+// TODO: show file size of file, zip, and zep
 func GetFileSize(pathToFile string) string {
 	// get the file size
 	fileSize, err := fileio.ReadFileSize(pathToFile)
